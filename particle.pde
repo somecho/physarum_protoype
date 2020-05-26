@@ -6,18 +6,20 @@ class particle{
   float maxSpeed;
 
   float depositAmt;
+  float senseDist;
 
-  particle(){
-    pos = new PVector(random(width),random(height));
+  particle(float x, float y ){
+    pos = new PVector(x,y);
     dir = new PVector(0,0);
     //produce 1 from 8 directions
     //later multiply by 45
-    heading = floor(random(8));
+    heading = floor(random(16));
 
 
 
-    depositAmt = 50;
-    maxSpeed = 1;
+    depositAmt = 170;
+    maxSpeed = 5.8;
+    senseDist = 7.2;
   }
 
   void show(){
@@ -41,16 +43,17 @@ class particle{
     float maxIntensity = 0;
     float maxHeading = 0;
     for(int i = -1; i<2; i++){
+      //look in directions relative to heading
+      float look = heading + i;
       //get radians angle from heading direction
-      float angle = radians(heading*45);
-      PVector offset = PVector.fromAngle(angle);
-      offset.normalize();
-      offset.x = floor(offset.x);
-      offset.y = floor(offset.y);
+      float angle = radians(look*22.5);
+
+      PVector offset = PVector.fromAngle(angle).mult(senseDist);
+ 
 
       int currentX, currentY;
-      currentX = int(floor(pos.x) + offset.x);
-      currentY = int(floor(pos.y) + offset.y);
+      currentX = int(pos.x + offset.x);
+      currentY = int(pos.y + offset.y);
 
       if(currentX > width-1){
         currentX = 0;
@@ -72,7 +75,7 @@ class particle{
         dir.setMag(maxSpeed);
         maxHeading = i;
       }
-    }
+   }
    //turn particle
     heading+=maxHeading;
   }
@@ -80,6 +83,7 @@ class particle{
   void move(){
     pos.add(dir);
     wrap();
+    //resetPos();
   }
 
   void wrap(){
@@ -103,6 +107,10 @@ class particle{
       pos.y = floor(random(height));
       dir = PVector.random2D();
     }
+  }
+
+  void reset(){
+    pos = new PVector(random(width),random(height));
   }
 
 

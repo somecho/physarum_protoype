@@ -8,7 +8,7 @@ class trailmap{
   trailmap(){
     grid = new float[width][height];
     buffer = new float[width][height];
-    decayRate = 0.79;
+    decayRate = 0.59;
   }
 
   void draw(){
